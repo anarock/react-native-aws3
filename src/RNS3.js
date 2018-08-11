@@ -30,7 +30,7 @@ const setBodyAsParsedXML = (response) =>
   })
 
 export class RNS3 {
-  static put(file, options) {
+  static put(file, options, timeout) {
     options = {
       ...options,
       key: (options.keyPrefix || '') + file.name,
@@ -44,6 +44,7 @@ export class RNS3 {
 
     return Request.create(url, method, policy)
       .set("file", file)
+      .setTimeout(timeout)
       .send()
       .then(setBodyAsParsedXML)
   }

@@ -75,6 +75,11 @@ export class Request {
     return this;
   }
 
+  setTimeout(value = 0) {
+    this._xhr.timeout = value;
+    return this;
+  }
+
   send() {
     this._xhr.send(this._formData);
     return this;
