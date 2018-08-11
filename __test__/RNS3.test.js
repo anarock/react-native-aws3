@@ -17,6 +17,8 @@ describe('RNS3.put', () => {
     secretKey: 'pLx+brfx0u12ERMcJCfNAEOKH+bMk40ZVa7hh8'
   }
 
+  const timeout = 0
+
   const originalRequestCreate = Request.create
   const originalS3PolicyGenerate = S3Policy.generate
 
@@ -37,12 +39,13 @@ describe('RNS3.put', () => {
     const mockRequest = {
       set: jest.fn(() => mockRequest),
       send: jest.fn(() => mockRequest),
+      setTimeout: jest.fn(() => mockRequest),
       then: jest.fn(() => mockRequest)
     }
 
     Request.create.mockReturnValueOnce(mockRequest)
 
-    const result = RNS3.put(file, options)
+    const result = RNS3.put(file, options, timeout)
     expect(result).toBe(mockRequest)
 
     const s3PolicyGenerateMock = S3Policy.generate.mock
@@ -65,6 +68,10 @@ describe('RNS3.put', () => {
     expect(mockRequestSetMock.calls.length).toBe(1)
     expect(mockRequestSetMock.calls[0][0]).toBe('file')
     expect(mockRequestSetMock.calls[0][1]).toBe(file)
+
+    const mockRequestSetTimeoutMock = mockRequest.setTimeout.mock
+    expect(mockRequestSetTimeoutMock.calls.length).toBe(1)
+    expect(mockRequestSetTimeoutMock.calls[0][0]).toBe(timeout)
   })
 
   describe('supports `keyPrefix` option', () => {
@@ -75,6 +82,7 @@ describe('RNS3.put', () => {
       const mockRequest = {
         set: jest.fn(() => mockRequest),
         send: jest.fn(() => mockRequest),
+        setTimeout: jest.fn(() => mockRequest),
         then: jest.fn(() => mockRequest)
       }
 
@@ -114,6 +122,7 @@ describe('RNS3.put', () => {
       const mockRequest = {
         set: jest.fn(() => mockRequest),
         send: jest.fn(() => mockRequest),
+        setTimeout: jest.fn(() => mockRequest),
         then: jest.fn(() => mockRequest)
       }
 
@@ -160,6 +169,7 @@ describe('RNS3.put', () => {
       const mockRequest = {
         set: jest.fn(() => mockRequest),
         send: jest.fn(() => mockRequest),
+        setTimeout: jest.fn(() => mockRequest),
         then: jest.fn(fn => fn(response))
       }
 
